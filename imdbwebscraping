@@ -1,0 +1,17 @@
+from bs4 import BeautifulSoup as bs
+import requests
+import pandas as pd
+
+imdb_url = ['https://www.imdb.com/title/tt2631186/', 'https://www.imdb.com/title/tt4849438/']
+movie = {'title' :[],'imdb_rating': []}
+for url in imdb_url:
+    
+    response = requests.get(url)
+    soup = bs(response.content, features = 'lxml')
+
+    movie['title'].append(soup.find('div', attrs = {'class': 'title_wrapper'}).find('h1').text)
+    movie['imdb_rating'].append(soup.find('span', attrs = {'itemprop': 'ratingValue'}).text)
+
+
+df = pd.DataFrame(movie)
+print(df)
